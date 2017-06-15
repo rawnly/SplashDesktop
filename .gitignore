@@ -1,0 +1,4 @@
+.DS_Store
+libs/test.js
+dist
+node_modules
