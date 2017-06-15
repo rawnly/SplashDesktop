@@ -21,15 +21,27 @@ module.exports = (id, d_path) => {
 		const body = response.body;
 		const photo = jparse(body);
 
-		download({
-			url: photo.urls.full,
-			file: photo.id + '.jpg',
-			path: d_path
-		}, (i, p) => {
+		// download({
+		// 	url: photo.urls.full,
+		// 	file: photo.id + '.jpg',
+		// 	path: d_path
+		// }, (i, p) => {
+		// 	dock.bounce();
+		// 	notify('Download completed', {body: p});
+		// 	wallpaper.set(path.join(i));
+		// });
+
+		notify('Download Started', {body: 'PHOTO NAME: ' + photo.id.toUpperCase()});
+		download(BrowserWindow.getFocusedWindow(), photo.urls.full, {
+			directory: d_path,
+			filename: photo.id + '.jpg'
+		}).then(e => {
 			dock.bounce();
-			notify('Download completed', {body: p});
-			wallpaper.set(path.join(i));
-		});
+			wallpaper.set( join(d_path, photo.id + '.jpg') );
+			notify('Download completed', {body: 'Path: ' + d_path});
+		}).catch(e => {
+			console.log('ERROR');
+		})
 	});
 
 	return true;

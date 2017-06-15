@@ -8,6 +8,7 @@
  "dependencies": {
   "about-window": "^1.6.3",
   "command-exists": "^1.2.2",
+  "electron-dl": "^1.9.0",
   "electron-is": "^2.4.0",
   "electron-lets-move": "^0.0.5",
   "electron-main-notification": "^1.0.1",
@@ -29,7 +30,7 @@
  },
  "scripts": {
   "package-macos": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icon.icns --prune=false --out=dist",
-	"build": "build"
+  "build": "build"
  },
  "build": {
   "appId": "com.electron.splash-desktop",
