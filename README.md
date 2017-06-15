@@ -1,6 +1,7 @@
-# Splash Desktop
+# Splash Desktop
+> A desktop verision of [splash-cli](https://github.com7splash-cli)
 
-> Splash Desktop is now here!
+### Splash Desktop is now here!
 
 ![screen shot 2017-06-16 at 01 48 07](https://user-images.githubusercontent.com/16429579/27206175-f3c937a4-5235-11e7-8612-eeaf24d2680e.png)
 > Main view
