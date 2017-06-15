@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 # Splash Desktop
 > Splash Desktop is now here!
+=======
+# Splash Desktop
+> A desktop verision of [splash-cli](https://github.com7splash-cli)
+
+### Splash Desktop is now here!
+>>>>>>> 10622f65b934cd9a763c0eb4e016fdf6a3dd717b
 
 > **SOON A GOOD README**
 
