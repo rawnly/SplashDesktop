@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const {app} = require('electron');
 const got = require('got');
-const download = require('simple-download');
+const {shell, app, BrowserWindow} = require('electron');
+// const download = require('simple-download');
+const {download} = require('electron-dl');
 const wallpaper = require('wallpaper');
 const normalize = require('normalize-url');
 const notify = require('electron-main-notification');
