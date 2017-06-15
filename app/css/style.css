@@ -1,0 +1,76 @@
+@import url('helpers/normalize.css');
+@import url('helpers/skeleton.css');
+@import url('fonts/hero/stylesheet.css');
+
+html * {
+	box-sizing: border-box;
+}
+
+
+html:root {
+	--c--darkgray: #1D1C1F;
+}
+
+body,
+html {
+	font-size: 18px;
+	color: var(--c--darkgray);
+}
+
+.hero {
+	font-family: 'Hero', sans-serif;
+	font-weight: 100;
+}
+
+main {
+	width: 100vw;
+	height: 100vh;
+
+	display: table;
+
+	padding: 35px
+}
+
+.centered {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.handle {
+	padding: 15px;
+	display: table;
+	width: 100vw;
+	height: 1vh;
+	-webkit-app-region: drag;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.form {
+	width: 70vw;
+	height: auto;
+	/*text-align: center*/
+}
+
+.btn-group {
+	width: 100%;
+	text-align: center;
+}
+
+.form input:not([type="button"]) {
+	width: 100%;
+}
+
+
+main.center {
+	display: flex;
+	justify-content: space-around;
+	align-items: center
+}
+
+.logo {
+	width: 20vw;
+	fill: #111
+}
