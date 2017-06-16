@@ -1,0 +1,148 @@
+body #burger + .burger-label {
+  position: fixed;
+	bottom: 10px;
+	right: 20px;
+  height: 20px;
+  width: 15px;
+  z-index: 5;
+}
+body #burger + .burger-label span {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 50%;
+  margin-top: -1px;
+  left: 0;
+  display: block;
+  background: #fff;
+	/* #1e1e1e */
+  transition: .5s;
+}
+body #burger + .burger-label span:first-child {
+  top: 3px;
+}
+body #burger + .burger-label span:last-child {
+  top: 16px;
+}
+body .burger-label:hover {
+  cursor: pointer;
+}
+body #burger:checked + .burger-label span {
+  opacity: 0;
+  top: 50%;
+}
+body #burger:checked + .burger-label span:first-child {
+  opacity: 1;
+  transform: rotate(405deg);
+	background: #fff;
+}
+body #burger:checked + .burger-label span:last-child {
+  opacity: 1;
+  transform: rotate(-405deg);
+	background: #fff;
+}
+body #burger ~ .menu {
+  background: transparent;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+	background: #1e1e1e;
+  z-index: 3;
+  transition: .25s;
+  overflow: hidden;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	/*opacity: 0;*/
+}
+body #burger ~ .menu > ul {
+	text-align: center;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+body #burger ~ .menu > ul > li {
+  opacity: 0;
+  transition: .25s;
+  transition-delay: 0s;
+	margin: 30px;
+}
+body #burger ~ .menu > ul > li > a {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #020304;
+  font-weight: 700;
+  font-family: 'Hero', sans-serif;
+  display: block;
+}
+body #burger:checked ~ .menu {
+	opacity: 1;
+  transition-delay: 0s;
+	background: #1b1b1b;
+	height: 100%;
+	color: #fff;
+}
+body #burger:checked ~ .menu > ul > li {
+  opacity: 1;
+  transition-delay: .25s;
+	color: #fff;
+}
+body #burger:checked ~ .menu > ul > li > a {
+  opacity: 1;
+  transition-delay: .25s;
+	color: #fff;
+}
+
+#burger {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: -1;
+	display: none;
+}
+
+a {
+	transition: all .25s;
+}
+
+a:hover {
+	opacity: .7;
+}
+
+
+
+
+
+
+a.animated {
+  cursor: pointer;
+  position: relative;
+  color: #fff;
+  text-decoration: none; }
+  a.animated:hover {
+    color: #fff; }
+  a.animated:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  a.animated:hover:before,
+	a.animated.active:before {
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1); }
+  a.animated:active:before {
+    visibility: visible;
+    opacity: 0.7; }

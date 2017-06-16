@@ -74,3 +74,21 @@ main.center {
 	width: 20vw;
 	fill: #111
 }
+
+
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+button {
+	transition: background .2s, border-color .2s, color .2s;
+}
+
+
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+button:hover {
+	background: #333;
+	border-color: #333;
+	color: #fff;
+}
