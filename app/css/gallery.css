@@ -1,10 +1,55 @@
-.flex {
+.grid {
 	display: flex;
 	justify-content: space-around;
 	flex-direction: row;
 	flex-wrap: wrap;
+	padding-bottom: 80px;
 }
 
-.item {
-	
+a.item {
+	margin: 10px;
+	padding: 0;
+	max-width: 200px;
+	max-height: 200px;
+	position: relative;
+}
+
+#content {
+	display: none;
+}
+
+.item > img {
+	max-width: 200px;
+	max-height: 200px;
+	display: table;
+}
+
+main {
+	width: 100vw;
+	padding: 35px;
+	height: auto;
+}
+
+.box {
+	height: 100px;
+	width: 100px;
+	background: #1e1e1e;
+}
+
+.spinner {
+	width: 200px;
+	transition: .25s;
+	opacity: 1;
+	transform-origin: center;
+}
+
+.spinner-container {
+	width: 100vw;
+	height: 100vw;
+
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+
+	transition: all .25s;
 }

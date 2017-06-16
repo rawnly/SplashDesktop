@@ -1,1 +1,10 @@
-// This file was created with "better_touch_files"
+const {ipcRenderer} = require('electron');
+const ipc = ipcRenderer;
+
+$(document).ready(function() {
+
+	$('#downloadPath').click(() => {
+		ipc.send('setPath', '');
+	})
+
+});

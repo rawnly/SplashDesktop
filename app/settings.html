@@ -6,10 +6,14 @@
 
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/menu.css">
+		<link rel="stylesheet" href="css/settings.css">
 	</head>
 	<body>
-		<main>
-
+		<main class="flex">
+			<div class="group">
+				<input type="button" id="downloadPath" value="Download Path">
+				<input type="button" value="Restore Defaults">
+			</div>
 		</main>
 
 		<input id="burger" type="checkbox" />
@@ -20,13 +24,15 @@
 		</label>
 		<nav class="menu">
 		  <ul>
-		    <li><a class="animated" href="gallery.html">Gallery</a></li>
-		    <li><a class="animated" href="index.html">Home</a></li>
-		    <li><a class="animated active" href="#">Settings</a></li>
+		    <li><a class="animated" data-href="gallery.html">Gallery</a></li>
+		    <li><a class="animated" data-href="index.html">Home</a></li>
+		    <li><a class="animated active" data-href="#">Settings</a></li>
 		  </ul>
 		</nav>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
 		<script src="js/main.js" charset="utf-8"></script>
 		<script src="js/settings.js" charset="utf-8"></script>
+
 	</body>
 </html>

@@ -38,12 +38,11 @@ main {
 }
 
 .handle {
-	padding: 15px;
+	padding: 20px;
 	display: table;
 	width: 100vw;
-	height: 1vh;
 	-webkit-app-region: drag;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 }

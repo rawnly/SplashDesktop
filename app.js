@@ -45,81 +45,11 @@ const template = [
 			}, {
 				label: 'Preferences',
 				accelerator: 'cmdOrCtrl+,',
-				submenu: [
-					{
-						label: 'Set default path',
-						click: () => {
-							dialog.showOpenDialog({
-								title: 'Select default save path',
-								defaultPath: settings.get('path'),
-								buttonLabel: 'Set as splash folder',
-								properties: [
-									'openDirectory',
-									'openFile',
-									'createDirectory'
-								]
-							}, e => {
-								console.log(e[0]);
-								if (e != undefined) {
-									settings.set('path', e[0]);
-									mkdirp.sync(e[0]);
-									notify('New download path', {body: settings.get('path')});
-								}
-							});
-						}
-					}, {type: 'separator'},
-					{
-						label: cmdExists.sync('npm') ? 'Install Shell Commands' : 'Install Shell Commands (Node REQUIRED)',
-						enabled: cmdExists.sync('npm') ? (cmdExists.sync('splash') ? false : true) : false,
-						click: e => {
-							execa('yarn', ['--version']).then(() => {
-								execa('yarn', ['global', 'add', 'splash-cli']).then(() => {
-									notify('Splash Desktop', {body: 'Splash Cli has been installed!'});
-									e.enabled = false;
-								}).catch(() => {
-									execa('npm', ['--version']).then(() => {
-										execa('npm', ['i', '-g', 'splash-cli']).then(() => {
-											notify('Splash Desktop', {body: 'Splash Cli has been installed!'});
-											e.enabled = false;
-										});
-									});
-								});
-							}).catch(() => {
-								execa('npm', ['--version']).then(() => {
-									execa('npm', ['i', '-g', 'splash-cli']).then(() => {
-										notify('Splash Desktop', {body: 'Splash Cli has been installed!'});
-										e.enabled = false;
-									});
-								});
-							});
-						}
-					}, {
-						label: 'Uninstall Helper',
-						enabled: Boolean(cmdExists.sync('splash')),
-						click: e => {
-							execa('yarn', ['--version']).then(() => {
-								execa('yarn', ['global', 'remove', 'splash-cli']).then(() => {
-									notify('Splash Desktop', {body: 'Splash Cli has been removed...'});
-									e.enabled = false;
-								}).catch(() => {
-									execa('npm', ['--version']).then(() => {
-										execa('npm', ['remove', '-g', 'splash-cli']).then(() => {
-											notify('Splash Desktop', {body: 'Splash Cli has been removed...'});
-											e.enabled = false;
-										});
-									});
-								});
-							}).catch(() => {
-								execa('npm', ['--version']).then(() => {
-									execa('npm', ['remove', '-g', 'splash-cli']).then(() => {
-										notify('Splash Desktop', {body: 'Splash Cli has been removed...'});
-										e.enabled = false;
-									});
-								});
-							});
-						}
-					}
-				]
+				click: () => {
+					var focus = BrowserWindow.getFocusedWindow();
+
+					focus.loadURL('file://' + join(__dirname, 'app', 'settings.html'))
+				}
 			}, {type: 'separator'}, {
 				label: 'Quit',
 				role: 'quit',
@@ -155,7 +85,8 @@ const template = [
 		role: 'window',
 		submenu: [
       {role: 'minimize'},
-      {role: 'close'}
+      {role: 'close'},
+			{role: 'toggledevtools'}
 		]
 	}, {
 		label: 'Help',
@@ -255,6 +186,9 @@ app.on('ready', e => {
 			splashID(idParser(text), settings.get('path'));
 		}
 	});
+
+	ipc.on('setPath', (e) => setDownloadPath());
+
 });
 
 
@@ -273,6 +207,28 @@ app.on('window-all-closed', e => {
 		e.preventDefault();
 	}
 });
+
+
+
+
+function setDownloadPath() {
+	dialog.showOpenDialog({
+		title: 'Select default save path',
+		defaultPath: settings.get('path'),
+		buttonLabel: 'Set as splash folder',
+		properties: [
+			'openDirectory',
+			'openFile',
+			'createDirectory'
+		]
+	}, e => {
+		if (e != undefined) {
+			settings.set('path', e[0]);
+			mkdirp.sync(e[0]);
+			notify('New download path', {body: settings.get('path')});
+		}
+	});
+}
 
 function startBounce(interval = 1500) {
 	const c = 1;
