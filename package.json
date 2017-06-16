@@ -44,7 +44,7 @@
     "productName": "Splash Desktop",
     "copyright": "Copyright © 2017 ${author}",
     "asar": true,
-    "compression": "store",
+    "compression": "maximum",
     "artifactName": "${productName}-${version}.${ext}",
     "mac": {
       "category": "public.app-category.photography",
