@@ -30,6 +30,7 @@
     "electron-packager": "^8.7.1",
     "electron-rebuild": "^1.5.11",
     "electron-windows-installer": "^1.4.4",
+    "electron-winstaller": "^2.6.2",
     "gulp": "^3.9.1"
   },
   "scripts": {
