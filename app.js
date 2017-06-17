@@ -16,11 +16,13 @@ const notify = require('electron-main-notification');
 const frun = require('first-run');
 const mkdirp = require('mkdirp');
 const wallpaper = require('wallpaper');
+const got = require('got');
+const compare = require('compare-versions');
 
 const splash = require('./libs/splash');
 const splashID = require('./libs/splash-id');
 const idParser = require('./libs/id-parser');
-const checkUpdate = require('./libs/check-update');
+const pkg = require('./package.json');
 
 const ipc = ipcMain;
 const join = path.join;
@@ -145,24 +147,6 @@ const template = [
 ];
 
 app.on('ready', e => {
-	var newVersion = checkUpdate();
-
-	if (newVersion) {
-		dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
-			title: `Update Available! ${newVersion}`,
-			message: `New Version available!`,
-			detail: `A new version of SplashDesktop is available! Download now!`,
-			buttons: [
-				"Download",
-				"Later"
-			]
-		}, (e) => {
-			if (e == 0) {
-				shell.openExternal('https://github.com/rawnly/splashdesktop')
-			}
-		})
-	}
-
 	if (settings.get('moved') == false || settings.get('moved') == undefined) {
 		moveToApplications(function(err, moved) {
 			if (err) {
@@ -221,6 +205,8 @@ app.on('ready', e => {
 	indexWindow.on('ready-to-show', () => {
 		splashScreen.hide();
 		indexWindow.show();
+		indexWindow.focus();
+		checkUpdate();
 	})
 
 	const menu = Menu.buildFromTemplate(template);
@@ -242,6 +228,8 @@ app.on('ready', e => {
 			console.log(e);
 		})
 	}
+
+
 
 	ipc.on('download', (e, text) => {
 		if (text == 'random') {
@@ -347,6 +335,31 @@ function setDownloadPath() {
 			notify('New download path', {body: settings.get('path')});
 		}
 	});
+}
+
+function checkUpdate() {
+	got('https://raw.githubusercontent.com/Rawnly/SplashDesktop/master/package.json').then(({body}) => {
+		var latest = JSON.parse(body).version;
+		var installed = pkg.version;
+
+		if (latest != installed) {
+			if (compare(latest, installed) == 1) {
+				dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+					title: `Update Available! ${latest}`,
+					message: `New Version available!`,
+					detail: `A new version of SplashDesktop is available! Download now!`,
+					buttons: [
+						"Download",
+						"Later"
+					]
+				}, (e) => {
+					if (e == 0) {
+						shell.openExternal('https://github.com/rawnly/splashdesktop')
+					}
+				})
+			}
+		}
+	})
 }
 
 function startBounce(interval = 1500) {

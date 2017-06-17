@@ -1,6 +1,6 @@
 {
   "name": "SplashDesktop",
-  "version": "0.1.2",
+  "version": "0.0.2",
   "main": "app.js",
   "license": "MIT",
   "description": "Splah Cli desktop tool",
