@@ -3,8 +3,8 @@ const path = require('path');
 
 const wallpaper = require('wallpaper');
 const settings = require('electron-settings');
-const {app, shell} = require('electron');
-
+const {ipcRenderer, app, shell} = require('electron');
+const ipc = ipcRenderer;
 const join = path.join;
 
 var grid = $('.flex');
@@ -15,9 +15,34 @@ const folder = settings.get('path');
 photos.forEach(item => {
 	if (checkPic(item)) {
 		const picPath = join(folder, item);
-		$('.grid').append(`<a class="item" href="${picPath}"><img src="${picPath}"></a>`)
+		$('.grid').append(`
+			<div class="item">
+				<div data-path="${picPath}" data-action="open" class="split-left"></div>
+				<div data-path="${picPath}" data-action="set" class="split-right"></div>
+				<div data-path="${picPath}" data-action="show" class="split-bottom"></div>
+				<img src="${picPath}">
+			</div>
+		`)
 	}
+});
+
+
+$('[data-path]').each(function() {
+	$(this).click(() => {
+		if ($(this).attr('data-action') == 'set') {
+			var path = $(this).attr('data-path');
+			ipc.send('setPic', path);
+		} if ($(this).attr('data-action') == 'show') {
+			var path = $(this).attr('data-path');
+			ipc.send('showPic', path);
+		} if ($(this).attr('data-action') == 'open') {
+			var path = $(this).attr('data-path');
+			ipc.send('openPic', path);
+		}
+	})
 })
+
+
 
 $('[data-bg]').each(function(i) {
 	$(this).css({
@@ -43,6 +68,6 @@ $(window).on('load', () => {
 		$('.spinner-container').css('display', 'none')
 		setTimeout(function () {
 			$('#content').css('display', 'block')
-		}, 500);
+		}, 50);
 	})
 })

@@ -6,23 +6,10 @@
 	padding-bottom: 80px;
 }
 
-a.item {
-	margin: 10px;
-	padding: 0;
-	max-width: 200px;
-	max-height: 200px;
-	position: relative;
-}
-
 #content {
 	display: none;
 }
 
-.item > img {
-	max-width: 200px;
-	max-height: 200px;
-	display: table;
-}
 
 main {
 	width: 100vw;
@@ -53,3 +40,131 @@ main {
 
 	transition: all .25s;
 }
+
+.item {
+	margin: 10px;
+	padding: 0;
+	max-width: 200px;
+	max-height: 200px;
+	position: relative;
+	color: white;
+	opacity: 1;
+}
+
+a:hover {
+	opacity: 1 !important;
+}
+
+.item > img {
+	max-width: 200px;
+	max-height: 200px;
+	display: table;
+	transform-origin: center;
+	transition: all .25s;
+}
+
+.item .split-left,
+.item .split-right {
+	position: absolute;
+	top: 0;
+	display: inline;
+	width: 50%;
+	height: 75%;
+	transition: all .25s;
+	cursor: pointer;
+}
+
+.item .split-bottom {
+	position: absolute;
+	bottom: 0;
+	display: inline;
+	width: 100%;
+	height: 25%;
+	transition: all .25s;
+	cursor: pointer;
+}
+
+.item .split-left::before,
+.item .split-right::before,
+.item .split-bottom::before {
+	font-family: "Ionicons";
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+
+	width: 100%;
+	height: 100%;
+	text-transform: uppercase;
+}
+
+.item:hover .split-right::before {
+	content: '\f358';
+	border: 0px 0px 0px 0px dashed #fff;
+	border-collapse: collapse;
+}
+.item:hover .split-left::before {
+	content: "\f133";
+	border: 0px 1px 0px 0px dashed #fff;
+	border-collapse: collapse;
+}
+.item:hover .split-bottom::before {
+	content: '\f434';
+	border: 1px 0px 0px 0px dashed #fff;
+	border-collapse: collapse;
+}
+
+.split-left {
+	left: 0;
+}
+
+.split-right {
+	right: 0;
+}
+
+
+.item:hover .split-left,
+.item:hover .split-right,
+.item:hover .split-bottom {
+	background: rgba(27,27,27,.3);
+}
+.item:hover .split-left:hover,
+.item:hover .split-right:hover,
+.item:hover .split-bottom:hover {
+	background: rgb(27,27,27);
+}
+
+/*
+.item::before,
+.item::after {
+	display: inline;
+	content: '';
+	position: absolute;
+	width: 50%;
+	height: 100%;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	color: white;
+	font-weight: bold;
+	transition: all .25s;
+}
+
+.item::before {
+	left: 0;
+	top: 0;
+}
+
+.item::after {
+	right: 0;
+	top: 0;
+}
+
+.item:hover::before {
+	content: 'VIEW';
+	background: rgba(30, 30, 30, 0.8);
+}
+
+.item:hover::after {
+	content: 'SET';
+	background: rgba(30, 30, 30, 0.8);
+}*/

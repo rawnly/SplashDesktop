@@ -5,6 +5,7 @@ const os = require('os');
 const fs = require('fs');
 
 const {shell, dialog, BrowserWindow, app, ipcMain, Menu} = require('electron');
+const clear = require('clear');
 const is = require('electron-is');
 const {moveToApplications} = require('electron-lets-move');
 const openAboutWindow = require('about-window').default;
@@ -14,6 +15,7 @@ const settings = require('electron-settings');
 const notify = require('electron-main-notification');
 const frun = require('first-run');
 const mkdirp = require('mkdirp');
+const wallpaper = require('wallpaper');
 
 const splash = require('./libs/splash');
 const splashID = require('./libs/splash-id');
@@ -26,6 +28,7 @@ const dock = app.dock;
 let user = '';
 let bouncer = '';
 let forceQuit = false;
+let forceForceQuit = false;
 
 let indexWindow = "";
 let splashScreen = "";
@@ -45,11 +48,7 @@ const template = [
 			}, {
 				label: 'Preferences',
 				accelerator: 'cmdOrCtrl+,',
-				click: () => {
-					var focus = BrowserWindow.getFocusedWindow();
-
-					focus.loadURL('file://' + join(__dirname, 'app', 'settings.html'))
-				}
+				click: () => redirecTo('settings')
 			}, {type: 'separator'}, {
 				label: 'Quit',
 				role: 'quit',
@@ -86,7 +85,17 @@ const template = [
 		submenu: [
       {role: 'minimize'},
       {role: 'close'},
-			{role: 'toggledevtools'}
+			{ type: 'separator' },
+			{
+				label: 'Gallery',
+				accelerator: 'cmdOrCtrl+shift+g',
+				click: () => redirecTo('gallery')
+			}, {
+				label: 'Home',
+				accelerator: 'cmdOrCtrl+shift+h',
+				click: () => redirecTo('index')
+			}
+			// {role: 'toggledevtools'}
 		]
 	}, {
 		label: 'Help',
@@ -156,10 +165,13 @@ app.on('ready', e => {
 		width: 800,
 		height: 800,
 		frame: true,
-		titleBarStyle: 'hidden-inset',
+		titleBarStyle: 'hiddenInset',
 		resizable: false,
 		fullscreenable: false,
-		show: false
+		show: false,
+		vibrancy: 'light',
+		title: 'Splash Desktop',
+		maximizable: false
 	});
 	indexWindow.loadURL(`file://${join(__dirname, 'app', 'index.html')}`);
 
@@ -167,17 +179,38 @@ app.on('ready', e => {
 		width: 450,
 		height: 200,
 		frame: false,
-		resizable: false
+		resizable: false,
+		vibrancy: 'light',
+		title: 'splashscreen',
+		maximizable: false,
+		minimizable: false
 	})
 	splashScreen.loadURL(`file://${join(__dirname, 'app', 'splash.html')}`);
 
-	setTimeout(function () {
+	indexWindow.on('ready-to-show', () => {
 		splashScreen.hide();
-		indexWindow.show()
-	}, 1000);
+		indexWindow.show();
+	})
 
 	const menu = Menu.buildFromTemplate(template);
 	Menu.setApplicationMenu(menu);
+
+	if (process.platform === 'darwin') {
+	  app.on('before-quit', function() {
+	    forceQuit = true;
+	  });
+	  indexWindow.on('close', function(event) {
+	    if (!forceQuit) {
+	      event.preventDefault();
+				indexWindow.hide();
+	    }
+	  });
+		app.on('activate', (e) => {
+			indexWindow.show();
+			clear();
+			console.log(e);
+		})
+	}
 
 	ipc.on('download', (e, text) => {
 		if (text == 'random') {
@@ -186,27 +219,56 @@ app.on('ready', e => {
 			splashID(idParser(text), settings.get('path'));
 		}
 	});
-
 	ipc.on('setPath', (e) => setDownloadPath());
-
+	ipc.on('restoreDefaults', (e) => {
+		settings.path(parsePath('~/Pictures/splash_photos'));
+	})
+	ipc.on('showPic', (e, p) => {
+		shell.showItemInFolder(p);
+	})
+	ipc.on('setPic', (e, p) => {
+		wallpaper.set(p);
+	})
+	ipc.on('openPic', (e, p) => {
+		shell.openItem(p);
+	})
 });
-
-
-// app.on('browser-window-blur', () => {
-// 	console.log('BLURR');
-// 	indexWindow.loadURL(`file://${join(__dirname, 'app', 'splash.html')}`);
-// })
-//
-// app.on('browser-window-focus', () => {
-// 	console.log('FOCUSED');
-// 	indexWindow.loadURL(`file://${join(__dirname, 'app', 'index.html')}`);
-// })
 
 app.on('window-all-closed', e => {
 	if (!forceQuit && is.macOS()) {
 		e.preventDefault();
 	}
 });
+
+app.on('will-quit', (event) => {
+	if (forceForceQuit == false) {
+		event.preventDefault();
+		dialog.showMessageBox({
+			title: 'You are quitting..',
+			message: 'Are you sure?',
+			buttons: ['Yes', 'Nope']
+		}, (e) => {
+			if (e == 0) {
+				forceForceQuit = true;
+				app.quit();
+			} else {
+				indexWindow = new BrowserWindow({
+					width: 800,
+					height: 800,
+					frame: true,
+					titleBarStyle: 'hiddenInset',
+					resizable: false,
+					fullscreenable: false,
+					show: true,
+					vibrancy: 'light',
+					title: 'Splash Desktop',
+					maximizable: false
+				});
+				indexWindow.loadURL(`file://${join(__dirname, 'app', 'index.html')}`);
+			}
+		});
+	}
+})
 
 
 
@@ -296,4 +358,11 @@ function parsePath(string) {
 	}
 
 	return string;
+}
+
+function redirecTo(pagename) {
+	var focus = BrowserWindow.getFocusedWindow();
+	focus.loadURL('file://' + join(__dirname, 'app', pagename + '.html'))
+
+	return 'file://' + join(__dirname, 'app', pagename + '.html');
 }

@@ -4,11 +4,16 @@
 
 html * {
 	box-sizing: border-box;
+	overflow-x: hidden;
 }
 
 
 html:root {
 	--c--darkgray: #1D1C1F;
+}
+
+input:not([type="button"]), input:not([type="button"]):focus, input:not([type="button"]):hover {
+	background: transparent !important;
 }
 
 body,
