@@ -20,6 +20,7 @@ const wallpaper = require('wallpaper');
 const splash = require('./libs/splash');
 const splashID = require('./libs/splash-id');
 const idParser = require('./libs/id-parser');
+const checkUpdate = require('./libs/check-update');
 
 const ipc = ipcMain;
 const join = path.join;
@@ -144,6 +145,24 @@ const template = [
 ];
 
 app.on('ready', e => {
+	var newVersion = checkUpdate();
+
+	if (newVersion) {
+		dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+			title: `Update Available! ${newVersion}`,
+			message: `New Version available!`,
+			detail: `A new version of SplashDesktop is available! Download now!`,
+			buttons: [
+				"Download",
+				"Later"
+			]
+		}, (e) => {
+			if (e == 0) {
+				shell.openExternal('https://github.com/rawnly/splashdesktop')
+			}
+		})
+	}
+
 	if (settings.get('moved') == false || settings.get('moved') == undefined) {
 		moveToApplications(function(err, moved) {
 			if (err) {
