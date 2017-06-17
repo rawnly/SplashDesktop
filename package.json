@@ -1,6 +1,6 @@
 {
   "name": "SplashDesktop",
-  "version": "0.0.2",
+  "version": "0.1.3",
   "main": "app.js",
   "license": "MIT",
   "description": "Splah Cli desktop tool",
@@ -36,6 +36,8 @@
     "gulp": "^3.9.1"
   },
   "scripts": {
+		"start": "electron .",
+		"test": "eslint app.js && eslint libs/*.js",
     "package-macos": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=build/icon.icns --prune=false --out=dist/mac",
     "package-win64": "electron-packager . --overwrite --platform=win32  --arch=x64 --icon=build/icon.ico --out dist/win",
     "build": "build",
