@@ -66,7 +66,8 @@ const template = [
       {role: 'paste'},
       {role: 'pasteandmatchstyle'},
       {role: 'delete'},
-      {role: 'selectall'}
+      {role: 'selectall'},
+			{role: 'toggledevtools'}
 		]
 	},
 	{
@@ -156,10 +157,21 @@ app.on('ready', e => {
 	}
 
 	if ( frun() ) {
+		settings.clearPath();
 		mkdirp.sync(parsePath('~/Pictures/splash_photos'));
 		settings.set('path', parsePath('~/Pictures/splash_photos'))
+		settings.set('askBeforeQuit', true);
 		user = os.homedir().split('/')[2];
 	}
+
+	app.dock.setMenu(Menu.buildFromTemplate([
+		{
+			label: 'Clear First Run',
+			click: () => frun.clear()
+		}
+	]))
+
+	console.log('ASK BEFORE QUIT: ' + settings.get('askBeforeQuit'));
 
 	indexWindow = new BrowserWindow({
 		width: 800,
@@ -220,9 +232,6 @@ app.on('ready', e => {
 		}
 	});
 	ipc.on('setPath', (e) => setDownloadPath());
-	ipc.on('restoreDefaults', (e) => {
-		settings.path(parsePath('~/Pictures/splash_photos'));
-	})
 	ipc.on('showPic', (e, p) => {
 		shell.showItemInFolder(p);
 	})
@@ -231,6 +240,35 @@ app.on('ready', e => {
 	})
 	ipc.on('openPic', (e, p) => {
 		shell.openItem(p);
+	})
+
+	ipc.on('askBeforeQuit', (e, ask) => {
+		settings.set('askBeforeQuit', ask)
+		console.log(ask);
+	})
+
+	ipc.on('restoreDefaults', (e) => {
+		dialog.showMessageBox({
+			type: 'question',
+			title: 'Settings',
+			detail: 'Splash Dekstop needs to be restarted to restore defaults.',
+			message: 'Restoring Defaults',
+			buttons: [
+				'Next time',
+				'Relaunch',
+				'Abort'
+			]
+		}, (e) => {
+			if (e == 1) {
+				forceForceQuit = true;
+				frun.clear();
+				app.quit();
+				app.relaunch();
+			} else if (e == 0) {
+				frun.clear();
+				console.log('NEXT TIME');
+			}
+		})
 	})
 });
 
@@ -241,7 +279,7 @@ app.on('window-all-closed', e => {
 });
 
 app.on('will-quit', (event) => {
-	if (forceForceQuit == false) {
+	if (settings.get('askBeforeQuit') == true && forceForceQuit == false) {
 		event.preventDefault();
 		dialog.showMessageBox({
 			title: 'You are quitting..',

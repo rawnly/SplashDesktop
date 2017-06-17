@@ -22,3 +22,12 @@ select {
 select * {
 	text-align: center;
 }
+
+.group {
+	text-align: center !important;
+}
+
+input {
+	display: block !important;
+	margin: 10px auto;
+}
