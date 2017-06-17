@@ -1,15 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
-const wallpaper = require('wallpaper');
 const settings = require('electron-settings');
-const {ipcRenderer, app, shell} = require('electron');
+const {ipcRenderer} = require('electron');
 const ipc = ipcRenderer;
 const join = path.join;
 
-var grid = $('.flex');
 var photos = fs.readdirSync(settings.get('path'));
-var pics = [];
 const folder = settings.get('path');
 
 photos.forEach(item => {
@@ -22,7 +19,7 @@ photos.forEach(item => {
 				<div data-path="${picPath}" data-action="show" class="split-bottom"></div>
 				<img src="${picPath}">
 			</div>
-		`)
+		`);
 	}
 });
 
@@ -39,8 +36,8 @@ $('[data-path]').each(function() {
 			var path = $(this).attr('data-path');
 			ipc.send('openPic', path);
 		}
-	})
-})
+	});
+});
 
 
 
@@ -50,7 +47,7 @@ $('[data-bg]').each(function(i) {
 		height: '200px',
 		background: 'red'
 	});
-})
+});
 
 function checkPic(text) {
 	if (text.split('.')[1] == 'jpg' && text.split('.')[0].length == 11) {
@@ -60,14 +57,17 @@ function checkPic(text) {
 	return false;
 }
 
-
 $(window).on('load', () => {
 	$('.spinner-container').animate({
 		opacity: 0
 	}, 500, () => {
-		$('.spinner-container').css('display', 'none')
+		$('.spinner-container').css('display', 'none');
 		setTimeout(function () {
-			$('#content').css('display', 'block')
+			$('#content').css('display', 'block');
+			$('.item').each(function() {
+				var imgH = $(this).find('> img').css('height');
+				$(this).css('max-height', imgH );
+			});
 		}, 50);
-	})
-})
+	});
+});

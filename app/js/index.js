@@ -1,5 +1,4 @@
 const {ipcRenderer} = require('electron');
-
 const ipc = ipcRenderer;
 
 $('#download').on('click', () => {
