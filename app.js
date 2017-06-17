@@ -4,7 +4,6 @@ const path = require('path');
 const os = require('os');
 
 const {shell, dialog, BrowserWindow, app, ipcMain, Menu} = require('electron');
-// const clear = require('clear');
 const is = require('electron-is');
 const {moveToApplications} = require('electron-lets-move');
 const openAboutWindow = require('about-window').default;
@@ -217,7 +216,6 @@ app.on('ready', () => {
 		});
 		app.on('activate', () => {
 			indexWindow.show();
-			clear();
 		});
 	}
 
