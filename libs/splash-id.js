@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 const got = require('got');
-const {shell, app, BrowserWindow} = require('electron');
+const {dialog, shell, app, BrowserWindow} = require('electron');
 // const download = require('simple-download');
 const {download} = require('electron-dl');
 const wallpaper = require('wallpaper');
 const normalize = require('normalize-url');
 const notify = require('electron-main-notification');
+const settings = require('electron-settings');
 
 const dock = app.dock;
 const join = path.join;
@@ -32,17 +33,35 @@ module.exports = (id, d_path) => {
 		// 	wallpaper.set(path.join(i));
 		// });
 
-		notify('Download Started', {body: 'PHOTO NAME: ' + photo.id.toUpperCase()});
-		download(BrowserWindow.getFocusedWindow(), photo.urls.full, {
-			directory: d_path,
-			filename: photo.id + '.jpg'
-		}).then(e => {
-			dock.bounce();
-			wallpaper.set( join(d_path, photo.id + '.jpg') );
-			notify('Download completed', {body: 'Path: ' + d_path});
-		}).catch(e => {
-			console.log('ERROR');
-		})
+		if (fs.existSync(join(d_path, photo.id + '.jpg'))) {
+			notify('This photo is in your directory!', {
+				body: 'PHOTO NAME: ' + photo.id.toUpperCase(),
+				click: () => {
+					shell.showItemInFolder(join(d_path, photo.id + '.jpg'));
+					wallpaper.set(join(d_path, photo.id + '.jpg'));
+				}
+			});
+
+		} else {
+			notify('Download Started', {body: 'PHOTO NAME: ' + photo.id.toUpperCase()});
+			settings.set('downloadCount', settings.get('downloadCount') + 1);
+			download(BrowserWindow.getFocusedWindow(), photo.urls.full, {
+				directory: d_path,
+				filename: photo.id + '.jpg'
+			}).then(() => {
+				dock.bounce();
+				wallpaper.set( join(d_path, photo.id + '.jpg') );
+				notify('Download completed', {body: 'Path: ' + d_path});
+			}).catch(e => {
+				dialog.showMessageBox({
+					message: e,
+					title: 'Error',
+					type: 'error'
+				});
+			});
+		}
+
+
 	});
 
 	return true;

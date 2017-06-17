@@ -1,13 +1,13 @@
-const fs = require('fs');
 const path = require('path');
 
 const got = require('got');
-const {shell, app, BrowserWindow} = require('electron');
+const {dialog, app, BrowserWindow} = require('electron');
 // const download = require('simple-download');
 const {download} = require('electron-dl');
 const wallpaper = require('wallpaper');
 const normalize = require('normalize-url');
 const notify = require('electron-main-notification');
+const settings = require('electron-settings');
 
 const join = path.join;
 const jparse = JSON.parse;
@@ -32,18 +32,23 @@ module.exports = d_path => {
 		// 	dock.downloadFinished(i);
 		// 	wallpaper.set(i);
 		// });
-		
+
 		notify('Download Started', {body: 'PHOTO NAME: ' + photo.id.toUpperCase()});
 		download(BrowserWindow.getFocusedWindow(), photo.urls.full, {
 			directory: d_path,
 			filename: photo.id + '.jpg'
-		}).then(e => {
+		}).then(() => {
+			settings.set('downloadCount', settings.get('downloadCount') + 1);
 			dock.bounce();
 			wallpaper.set( join(d_path, photo.id + '.jpg') );
 			notify('Download completed', {body: 'Path: ' + d_path});
 		}).catch(e => {
-			console.log('ERROR');
-		})
+			dialog.showMessageBox({
+				message: e,
+				title: 'Error',
+				type: 'error'
+			});
+		});
 	});
 
 	return true;

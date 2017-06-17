@@ -15,4 +15,4 @@ got('https://raw.githubusercontent.com/Rawnly/SplashDesktop/master/package.json'
 	}
 
 	return false;
-})
+});
