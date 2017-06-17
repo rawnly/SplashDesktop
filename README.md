@@ -1,13 +1,23 @@
 # Splash Desktop
-> A desktop verision of [splash-cli](https://github.com7splash-cli)
-> **SOON A GOOD README**
+> The desktop client for [splash-cli][splash-link]
 
-# Screenshots
-![screen shot 2017-06-16 at 01 48 07](https://user-images.githubusercontent.com/16429579/27206175-f3c937a4-5235-11e7-8612-eeaf24d2680e.png)
-> Main view
+**Splash Desktop**  is a tool, built on [Electron][electron-link], for downloading photos from [unsplash][unsplash-link] and set them as wallpaper.
 
-![screen shot 2017-06-16 at 01 48 22](https://user-images.githubusercontent.com/16429579/27206176-f3e11360-5235-11e7-8c4a-634450e5693a.png)
-> Path finder
+  ## Features
+- Image Gallery
+- Download from **URL** or by **ID**
+- You can now set the destination folder
 
-![screen shot 2017-06-16 at 01 48 35](https://user-images.githubusercontent.com/16429579/27206177-f3eb1608-5235-11e7-9c6d-4a429b3cfd18.png)
-> About window
+## Todo 
+- [ ] Better Settings page
+- [ ] Add more features from [splash-cli][splash-link]
+- [ ] Add more settings
+- [ ] Fix some graphic bugs
+- [ ] Clean the code
+
+
+
+[splash-link]: https://github.com/rawnly/splash-cli
+[unsplash-link]: https://unsplash.com
+[electron-link]: https://electron.atomio
+[rawnly-link]: https://rawnly.com
